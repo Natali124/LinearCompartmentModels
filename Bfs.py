@@ -17,14 +17,14 @@ def all_reach_outputs(graph, outputs):
     while queue:
         s = queue.pop(0)
         result.append(s)
-       
         for neighbour in graph[s]:
             if visited[neighbour] == 0:
                 visited[neighbour] = 1
                 queue.append(neighbour)
+
     return len(result) == len(graph)
    
-   
+# Gleb: it looks like the function above can do the same. Shall we remove this one?
 def bfs_for_specific_node(graph, node):
     """checks if specific output reaches all points"""
     graph = revert_graph(graph)
