@@ -1,9 +1,10 @@
-def revert_graph (graph):
+def revert_graph_set (graph):
+    """takes set graph notation, reverts and returns list"""
     n_of_vertices = len(graph)
     result = [[] for i in range(n_of_vertices)]
     for i in range(n_of_vertices):
-        for j in range(len(graph[i])):
-            result[graph[i][j]].append(i)
+        for number in graph[i]:
+            result[number].append(i)
     return result
 
 def all_reach_outputs(graph, outputs):
@@ -23,26 +24,3 @@ def all_reach_outputs(graph, outputs):
                 queue.append(neighbour)
 
     return len(result) == len(graph)
-   
-# Gleb: it looks like the function above can do the same. Shall we remove this one?
-def bfs_for_specific_node(graph, node):
-    """checks if specific output reaches all points"""
-    graph = revert_graph(graph)
-   
-    result = []
-    queue = []
-    visited = [0] * len(graph)
-    visited [node] = 1
-    queue.append(node)
-   
-    while queue:
-        s = queue.pop(0)
-        result.append(s)
-       
-        for neighbour in graph[s]:
-            if visited[neighbour] == 0:
-                visited[neighbour] = 1
-                queue.append(neighbour)
-    if len(result) == len(graph):
-        return True
-    return False
