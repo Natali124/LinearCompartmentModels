@@ -1,6 +1,7 @@
 def revert_graph_set (graph):
     """takes set graph notation, reverts and returns list"""
     n_of_vertices = len(graph)
+    # Gleb: should they be empty sets rather than empty lists?
     result = [[] for i in range(n_of_vertices)]
     for i in range(n_of_vertices):
         for number in graph[i]:
