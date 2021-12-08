@@ -25,10 +25,7 @@ def permute_graph (graph, permutation):
    
     for i in range(len(permutation)):
         result_graph[permutation[i]] = copy.deepcopy(graph[i])
-       
-        # Gleb: no need for variable s here I think
-        s = result_graph[permutation[i]]
-        result_graph[permutation[i]] = permute_set(s, permutation)
+        result_graph[permutation[i]] = permute_set(result_graph[permutation[i]], permutation)
     return result_graph
 
 def compare_models (model_1, model_2):
@@ -40,15 +37,19 @@ def compare_models (model_1, model_2):
     #creating a permutations object
    
     for permutation in permutations_object:
-        return (permute_graph(model_2.graph, permutation) == model_1.graph and 
-                permute_list(model_2.inputs, permutation) == model_1.inputs and 
-                permute_list(model_2.outputs, permutation) == model_1.outputs and 
-                permute_list(model_2.leaks, permutation) == model_1.leaks)
+        if (permute_graph(model_2.graph, permutation) == model_1.graph and 
+            permute_list(model_2.inputs, permutation) == model_1.inputs and 
+            permute_list(model_2.outputs, permutation) == model_1.outputs and 
+            permute_list(model_2.leaks, permutation) == model_1.leaks):
+            return True
+            
+        
 # Natali: We need to check on the specific permutation if all conditions hold. 
 # This is why we can not use compare_graphs. I decided to keep compare_graphs function
 # in case it gets useful later while we are dealing just with graph isomorphisms.
 # Gleb: I believe that this will consider only the first permutation and just return False
 # if that one did not work
+#Natali: it should work now!
 
 def generating_all_isomorphisms(base_graph):
     """generates all isomorphisms of a graph in a sorted way"""
