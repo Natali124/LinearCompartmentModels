@@ -23,7 +23,7 @@ def permute_graph (graph, permutation):
     """returns a graph created by tranforming given model with given permutation"""
     result_graph = [None]*len(graph)
    
-    for i in range(len(permutation)):
+    for i in range(len(graph)):
         result_graph[permutation[i]] = copy.deepcopy(graph[i])
         result_graph[permutation[i]] = permute_set(result_graph[permutation[i]], permutation)
     return result_graph
@@ -42,7 +42,7 @@ def compare_models (model_1, model_2):
             permute_list(model_2.outputs, permutation) == model_1.outputs and 
             permute_list(model_2.leaks, permutation) == model_1.leaks):
             return True
-            
+    return False
         
 # Natali: We need to check on the specific permutation if all conditions hold. 
 # This is why we can not use compare_graphs. I decided to keep compare_graphs function
