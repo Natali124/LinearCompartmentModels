@@ -1,6 +1,7 @@
 import itertools
 import copy
 from itertools import chain, combinations
+from Models import compare_graphs
 
 
 #region
@@ -78,3 +79,63 @@ def generating_graph_combinations(number):
             l.pop()
     func(0)
     return res
+
+def generating_graph_combinations_1(number):
+    """set notation: generates a list of all possible graphs with no loops"""
+    pregen_list = prepare_for_graph_set(number)
+    res = set()
+    l = Graph([])
+    def func (n):
+        if n == number:
+            res.add(copy.deepcopy(l))
+            print(l)
+            return
+        for i in pregen_list[n]:
+            l.list.append(i)
+            func (n+1)
+            l.list.pop()
+    func(0)
+    return res
+
+
+class Graph:
+    def __init__(self, list):
+        self.list = list
+    
+    def __eq__(self, another):
+        return compare_graphs(self.list, another.list)
+    
+    def __repr__(self):
+        return str(self.list)
+    
+    def __hash__(self):
+        sum = 0
+        for s in self.list:
+            sum += len(s)
+        return hash(sum)
+    
+
+def generating_graph_combinations_2(number):
+    """generates a list of all possible graphs with no loops"""
+    pregen_list = prepare_for_graph_set(number)
+    res = []
+    l = []
+    def func (n):
+        if n == number:
+            if not graph_in_list(l, res):
+                print(l)
+                res.append(copy.deepcopy(l))
+            return
+        for i in pregen_list[n]:
+            l.append(i)
+            func (n+1)
+            l.pop()
+    func(0)
+    return res
+
+def graph_in_list(graph, l):
+    for thing in l:
+        if compare_graphs(thing, graph) == True:
+            return True
+    return False
+        
