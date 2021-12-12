@@ -88,7 +88,6 @@ def generating_graph_combinations_1(number):
     def func (n):
         if n == number:
             res.add(copy.deepcopy(l))
-            print(l)
             return
         for i in pregen_list[n]:
             l.list.append(i)
@@ -99,6 +98,7 @@ def generating_graph_combinations_1(number):
 
 
 class Graph:
+    # Gleb: `list` is a name of a built-in function, it is not recommended to use it as a variable name
     def __init__(self, list):
         self.list = list
     
@@ -123,7 +123,6 @@ def generating_graph_combinations_2(number):
     def func (n):
         if n == number:
             if not graph_in_list(l, res):
-                print(l)
                 res.append(copy.deepcopy(l))
             return
         for i in pregen_list[n]:
