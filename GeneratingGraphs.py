@@ -2,6 +2,7 @@ import itertools
 import copy
 from itertools import chain, combinations
 from Models import compare_graphs
+from Bfs import is_connected
 
 
 #region
@@ -61,6 +62,7 @@ def prepare_for_graph_set(n):
     all_connections = get_powerset(n)
     for ind in range(n):
         res.append(prepare_for_vertex_set(ind, all_connections))
+        
     return res
 
 def generating_graph_combinations(number):
@@ -70,7 +72,8 @@ def generating_graph_combinations(number):
     l = Graph([])
     def func (n):
         if n == number:
-            res.add(copy.deepcopy(l))
+            if is_connected(l.list): #we use only connected graphs
+                res.add(copy.deepcopy(l))
             print(l)
             return
         for i in pregen_list[n]:

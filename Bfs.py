@@ -26,3 +26,30 @@ def all_reach_outputs(graph, outputs):
                 queue.append(neighbour)
 
     return len(result) == len(graph)
+
+def is_connected(graph):
+    queue = [0]
+    visited = [0] * len(graph)
+    result = set()
+    
+    while queue:
+        s = queue.pop()
+        result.add(s)
+        for neighbour in graph[s]:
+            if visited[neighbour] == 0:
+                visited[neighbour] = 1
+                queue.append(neighbour)
+    
+    rev_graph = revert_graph(graph)
+    
+    queue = [0]
+    
+    while queue:
+        s = queue.pop()
+        result.add(s)
+        for neighbour in rev_graph[s]:
+            if visited[neighbour] == 0:
+                visited[neighbour] = 1
+                queue.append(neighbour)
+    
+    return len(result) == len(graph)
