@@ -38,7 +38,6 @@ def get_powerset(n):
 #Here I changed 'combinations' in itertools so that it returns set instead of tuple.
 #Just powerset = possible connections for each edge.
 
-
 def prepare_for_vertex_set(ind, all_connections):
     """"removes sets which contain ind"""
     #creates a new list and put every set all_connections have apart from ones that 
@@ -65,22 +64,6 @@ def prepare_for_graph_set(n):
     return res
 
 def generating_graph_combinations(number):
-    """generates a list of all possible graphs with no loops"""
-    pregen_list = prepare_for_graph_set(number)
-    res = []
-    l = []
-    def func (n):
-        if n == number:
-            res.append(copy.deepcopy(l))
-            return
-        for i in pregen_list[n]:
-            l.append(i)
-            func (n+1)
-            l.pop()
-    func(0)
-    return res
-
-def generating_graph_combinations_1(number):
     """set notation: generates a list of all possible graphs with no loops"""
     pregen_list = prepare_for_graph_set(number)
     res = set()
@@ -88,6 +71,7 @@ def generating_graph_combinations_1(number):
     def func (n):
         if n == number:
             res.add(copy.deepcopy(l))
+            print(l)
             return
         for i in pregen_list[n]:
             l.list.append(i)
@@ -98,7 +82,6 @@ def generating_graph_combinations_1(number):
 
 
 class Graph:
-    # Gleb: `list` is a name of a built-in function, it is not recommended to use it as a variable name
     def __init__(self, list):
         self.list = list
     
@@ -108,33 +91,11 @@ class Graph:
     def __repr__(self):
         return str(self.list)
     
+    def __len__(self):
+        return len(self.list)
+    
     def __hash__(self):
         sum = 0
         for s in self.list:
             sum += len(s)
-        return hash(sum)
-    
-
-def generating_graph_combinations_2(number):
-    """generates a list of all possible graphs with no loops"""
-    pregen_list = prepare_for_graph_set(number)
-    res = []
-    l = []
-    def func (n):
-        if n == number:
-            if not graph_in_list(l, res):
-                res.append(copy.deepcopy(l))
-            return
-        for i in pregen_list[n]:
-            l.append(i)
-            func (n+1)
-            l.pop()
-    func(0)
-    return res
-
-def graph_in_list(graph, l):
-    for thing in l:
-        if compare_graphs(thing, graph) == True:
-            return True
-    return False
-        
+        return sum
