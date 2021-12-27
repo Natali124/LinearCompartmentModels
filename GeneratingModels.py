@@ -17,12 +17,12 @@ def generating_models(all_graphs, n_inputs, n_outputs, n_leaks):
             for out in all_outputs:
                 for leak in all_leaks:
                     model = LinearCompartmentModel(graph.list, inp, out, leak)
-                    if all_reach_outputs(model.graph, model.outputs) == False: #so that all vertices reach outputs
-                        continue
-                    all_models.append(model)
+                    if all_reach_outputs(model.graph, model.outputs): #so that all vertices reach outputs
+                        all_models.append(model)
     return all_models
     #         Problem: includes graphs which are not connected
     
 def choose_in_list (n_v, n_e):
     #take all tuples of size two
     return list(combinations(range(n_v), n_e))
+

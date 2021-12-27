@@ -74,7 +74,6 @@ def generating_graph_combinations(number):
         if n == number:
             if is_connected(l.list): #we use only connected graphs
                 res.add(copy.deepcopy(l))
-            print(l)
             return
         for i in pregen_list[n]:
             l.list.append(i)

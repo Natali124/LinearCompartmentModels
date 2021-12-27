@@ -11,12 +11,15 @@ class LinearCompartmentModel:
 
     def __eq__(self, other):
         return compare_models(self, other)
-    
+
+    # Gleb: by convention `__repr__` is a string of code that could be used to create the object
+    # in this case, `__str__` would be more appropriate
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
 
 def permute_set (s, permutation):
     """gives permutation as a new list"""
+    # Gleb: one could use a comprehension `return {permutation[num] for num in s}`
     res = set()
     for number in s:
         res.add(permutation[number])
@@ -24,7 +27,7 @@ def permute_set (s, permutation):
 
 def permute_graph (graph, permutation):
     """returns a graph created by tranforming given model with given permutation"""
-    result_graph = [None]*len(graph)
+    result_graph = [None] * len(graph)
    
     for i in range(len(graph)):
         result_graph[permutation[i]] = copy.deepcopy(graph[i])
