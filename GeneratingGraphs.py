@@ -44,16 +44,10 @@ def prepare_for_vertex_set(ind, all_connections):
     #creates a new list and put every set all_connections have apart from ones that 
     #contain ind.
     
-    #suggestion: if instead of all_connections, we directly generate here, we do not need 
-    #that many copying.
-    #problem: generating every time = copying every time (maybe)
-    #so maybe keep it this way.
-    
     res = []
     for set in all_connections:
         if ind not in set:
             res.append(set.copy())
-            #difference between .copy() and copy.deepcopy()?
     return res
 
 def prepare_for_graph_set(n):

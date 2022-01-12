@@ -15,11 +15,13 @@ def all_reach_outputs(graph, outputs):
    
     queue = list(copy.deepcopy(outputs))
     visited = [0] * len(graph)
-    result = []
+    for index in queue:
+        visited[index] = 1
+    result = set()
    
     while queue:
         s = queue.pop()
-        result.append(s)
+        result.add(s)
         for neighbour in graph[s]:
             if visited[neighbour] == 0:
                 visited[neighbour] = 1
@@ -30,6 +32,7 @@ def all_reach_outputs(graph, outputs):
 def is_connected(graph):
     queue = [0]
     visited = [0] * len(graph)
+    visited[0] = 1
     result = set()
     
     while queue:
