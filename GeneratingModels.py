@@ -34,7 +34,7 @@ class SetEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def json_write(models, filename):
-    """writes a list of models in the file"""
+    """writes a list of models in the file. Sets become lists to be compatable with json format"""
     with open(filename, 'w') as file:
         for model in models:
             temp = dict()
