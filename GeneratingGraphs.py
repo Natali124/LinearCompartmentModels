@@ -1,4 +1,3 @@
-import itertools
 import copy
 from itertools import chain, combinations
 from Models import compare_graphs
@@ -32,8 +31,7 @@ def powerset(iterable):
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
 def get_powerset(n):
-    res = list(powerset(range(n)))
-    return res
+    return list(powerset(range(n)))
 #endregion
 
 #Here I changed 'combinations' in itertools so that it returns set instead of tuple.
@@ -59,25 +57,29 @@ def prepare_for_graph_set(n):
         
     return res
 
-def generating_graph_combinations(number):
-    """set notation: generates a list of all possible graphs with no loops"""
+def generate_graphs(number):
+    """
+        set notation: generates a list of all possible connected graphs with no loops
+        takes isomorphisms into consideration.
+    """
     pregen_list = prepare_for_graph_set(number)
     res = set()
     l = Graph([])
-    def func (n):
+    def _rec (n):
         if n == number:
             if is_connected(l.list): #we use only connected graphs
                 res.add(copy.deepcopy(l))
             return
         for i in pregen_list[n]:
             l.list.append(i)
-            func (n+1)
+            _rec (n+1)
             l.list.pop()
-    func(0)
+    _rec(0)
     return res
 
 
 class Graph:
+    """"Graph.list gives list/set notation of the graph. Hashable."""
     def __init__(self, list):
         self.list = list
     
@@ -85,7 +87,7 @@ class Graph:
         return compare_graphs(self.list, another.list)
     
     def __repr__(self):
-        return str(self.list)
+        return f'Graph({str(self.list)})'
     
     def __len__(self):
         return len(self.list)

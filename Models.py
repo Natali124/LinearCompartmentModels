@@ -2,6 +2,13 @@ import itertools
 import copy
 
 class LinearCompartmentModel:
+    """
+        data attributes:
+            graph - list of sets
+            inputs - set
+            outputs - set
+            leaks - set
+    """
 
     def __init__(self, graph, inputs, outputs, leaks):
         self.graph = graph #array of integer sets representing the adjacency lists of the graph
@@ -12,8 +19,6 @@ class LinearCompartmentModel:
     def __eq__(self, other):
         return compare_models(self, other)
 
-    # Gleb: by convention `__repr__` is a string of code that could be used to create the object
-    # in this case, `__str__` would be more appropriate
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
 
@@ -53,7 +58,7 @@ def compare_models (model_1, model_2):
 # This is why we can not use compare_graphs. I decided to keep compare_graphs function
 # in case it gets useful later while we are dealing just with graph isomorphisms.
 
-def generating_all_isomorphisms(base_graph):
+def generate_all_isomorphisms(base_graph):
     """generates all isomorphisms of a graph in a sorted way"""
     result = []
    
@@ -78,28 +83,6 @@ def generating_all_isomorphisms(base_graph):
                 b == False
                 break
     return res
-
-
-def generating_models(all_graphs, n_inputs, n_outputs, n_leaks):
-    n = len(next(iter(all_graphs)).list)
-    all_models = []
-    all_inputs = choose_in_list(n, n_inputs)
-    all_outputs = choose_in_list(n, n_outputs)
-    all_leaks = choose_in_list(n, n_leaks)
-    for graph in all_graphs:
-        for inp in all_inputs:
-            for out in all_outputs:
-                for leak in all_leaks:
-                    all_models.append(LinearCompartmentModel(graph, inp, out, leak))
-    return all_models
-    #problems: includes ones where inputs don't reach outputs
-    #          includes graphs which are not connected
-
-        
-def choose_in_list (n_v, n_e):
-    #take all tuples of size two
-    return list(combinations(range(n_v), n_e))
-    
 
 def compare_graphs (graph_1, graph_2):
     """returns true if two graphs are the same, false otherwise"""

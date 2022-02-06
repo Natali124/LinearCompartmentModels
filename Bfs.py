@@ -30,6 +30,8 @@ def all_reach_outputs(graph, outputs):
     return len(result) == len(graph)
 
 def is_connected(graph):
+    """checks if graph is connected. Does not take into account that graph is directed. 
+        graph needs to be a list of sets."""
     queue = [0]
     visited = [0] * len(graph)
     visited[0] = 1

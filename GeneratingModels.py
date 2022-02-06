@@ -1,13 +1,12 @@
-from GeneratingGraphs import combinations
 from Models import LinearCompartmentModel
 from GeneratingGraphs import combinations
-from GeneratingGraphs import generating_graph_combinations
+from GeneratingGraphs import generate_graphs
 from Bfs import all_reach_outputs
 import copy
 import json
 
-def generating_models(all_graphs, n_inputs, n_outputs, n_leaks):
-    """returns list of all models"""
+def generate_models(all_graphs, n_inputs, n_outputs, n_leaks):
+    """returns list of all models on specified list of graphs and number of inputs/outputs/leaks"""
     n = len(next(iter(all_graphs)).list)
     all_models = []
     for graph in all_graphs:
@@ -35,6 +34,7 @@ class SetEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def json_write(models, filename):
+    """writes a list of models in the file"""
     with open(filename, 'w') as file:
         for model in models:
             temp = dict()
