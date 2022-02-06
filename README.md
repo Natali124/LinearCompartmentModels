@@ -24,7 +24,7 @@ Files in the project with important functions. The most important file is Genera
       e.g. generating_graph_combinations(2)
            -> {[set(), {0}], [{1}, {0}]}
            
-      Note: Resulting graphs are not lists of sets. They are in the form of Graph objects. Supposing g is an object of class Graph, you can access "list of sets"             notation using "g.list". Class Graph is defined in the same file.
+      Note: Resulting graphs are not lists of sets. They are in the form of Graph objects. Supposing g is an object of class Graph, you can access "list of sets" notation using "g.list". Class Graph is defined in the same file.
 
   Models.py
 
@@ -38,7 +38,7 @@ Files in the project with important functions. The most important file is Genera
 
     functions:
       generating_models(all_graphs, n_inputs, n_outputs, n_leaks)
-      - generates models, taking isomorphisms into consideration. all_graphs is a list of graphs that will be used (possibly using generating_graph_combinations           function)
+      - generates models, taking isomorphisms into consideration. all_graphs is a list of graphs that will be used (possibly using generating_graph_combinations function)
         e.g. generating_models(generating_graph_combinations(2), 1, 1, 1)
         -> [Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {0},
              Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {1},
