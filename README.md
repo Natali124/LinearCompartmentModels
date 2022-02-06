@@ -52,5 +52,6 @@ Files in the project with important functions. The most important file is Genera
       json_write(models, filename)
       - writes a list of models in the file
         e.g. m = generating_models(generating_graph_combinations(2), 1, 1, 1)
-             json_write(m, 'models.json')
-
+             json_write(m, 'models.json') #creates and writes/writes models in m into models.json file. Important: sets become lists to be compatable with json format
+             contents in the file:
+             {"graph": [[], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[], [0]], "inputs": [1], "outputs": [0], "leaks": [1]}{"graph": [[], [0]], "inputs": [1], "outputs": [0], "leaks": [1]}{"graph": [[1], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [1], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [1], "leaks": [0]}
