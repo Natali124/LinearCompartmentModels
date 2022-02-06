@@ -1,6 +1,6 @@
 # LinearCompartmentModels
 
-Files in the project with important functions. The most important file is GeneratingModels.py
+Files in the project with important functions. The most important file (from where can be generated models) is GeneratingModels.py
 
   Bfs.py
 
@@ -19,9 +19,9 @@ Files in the project with important functions. The most important file is Genera
   GeneratingGraphs.py
 
     functions:
-      generating_graph_combinations(n)
+      generate_graphs(n)
       - generated a list of all possible graphs with n vertices and no loops
-      e.g. generating_graph_combinations(2)
+      e.g. generate_graphs(2)
            -> {[set(), {0}], [{1}, {0}]}
            
       Note: Resulting graphs are not lists of sets. They are in the form of Graph objects. Supposing g is an object of class Graph, you can access "list of sets" notation using "g.list". Class Graph is defined in the same file.
@@ -37,9 +37,9 @@ Files in the project with important functions. The most important file is Genera
   GeneratingModels.py
 
     functions:
-      generating_models(all_graphs, n_inputs, n_outputs, n_leaks)
-      - generates models, taking isomorphisms into consideration. all_graphs is a list of graphs that will be used (possibly using generating_graph_combinations function)
-        e.g. generating_models(generating_graph_combinations(2), 1, 1, 1)
+      generate_models(all_graphs, n_inputs, n_outputs, n_leaks)
+      - generates models, taking isomorphisms into consideration. all_graphs is a list of graphs that will be used (possibly using generate_graphs function)
+        e.g. generate_models(generate_graphs(2), 1, 1, 1)
         -> [Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {0},
              Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {1},
              Graph: [set(), {0}], Inputs: {1}, Outputs: {0}, Leaks: {0},
@@ -50,8 +50,8 @@ Files in the project with important functions. The most important file is Genera
              Graph: [{1}, {0}], Inputs: {0}, Outputs: {1}, Leaks: {1}]
 
       json_write(models, filename)
-      - writes a list of models in the file
-        e.g. m = generating_models(generating_graph_combinations(2), 1, 1, 1)
-             json_write(m, 'models.json') #creates and writes/writes models in m into models.json file. Important: sets become lists to be compatable with json format
+      - writes a list of models in the file. Important: sets become lists to be compatable with json format
+        e.g. m = generate_models(generate_graphs(2), 1, 1, 1)
+             json_write(m, 'models.json') #writes models in m into models.json file.
              contents in the file:
              {"graph": [[], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[], [0]], "inputs": [1], "outputs": [0], "leaks": [1]}{"graph": [[], [0]], "inputs": [1], "outputs": [0], "leaks": [1]}{"graph": [[1], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [0], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [1], "leaks": [0]}{"graph": [[1], [0]], "inputs": [0], "outputs": [1], "leaks": [0]}
