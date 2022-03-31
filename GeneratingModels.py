@@ -44,3 +44,4 @@ def json_write(models, filename):
             temp['leaks'] = list(model.inputs)
             
             json.dump(temp, file, cls=SetEncoder)
+            file.write("\n")

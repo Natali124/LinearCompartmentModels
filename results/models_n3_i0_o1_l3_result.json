@@ -1,0 +1,18 @@
+{"outputs":[0],"leaks":[],"graph":[[],[0],[0]],"inputs":[],"result":{"(2, 0)":"locally","(1, 0)":"locally"}}
+{"outputs":[0],"leaks":[],"graph":[[],[0],[0,1]],"inputs":[],"result":{"(2, 0)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"locally"}}
+{"outputs":[0],"leaks":[],"graph":[[],[2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(2, 1)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[],[0],[1]],"inputs":[],"result":{"(2, 1)":"locally","(1, 0)":"locally"}}
+{"outputs":[0],"leaks":[],"graph":[[],[0,2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0],[0]],"inputs":[],"result":{"(2, 0)":"locally","(0, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[1],"leaks":[],"graph":[[1],[0],[0]],"inputs":[],"result":{"(2, 0)":"locally","(0, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0],[0,1]],"inputs":[],"result":{"(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[2],[0]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable"}}
+{"outputs":[1],"leaks":[],"graph":[[1],[2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable"}}
+{"outputs":[2],"leaks":[],"graph":[[1],[2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0,2],[1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[1],"leaks":[],"graph":[[1],[0,2],[1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[1],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[2],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1,2],[0,2],[0,1]],"inputs":[],"result":{"(1, 2)":"nonidentifiable","(0, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}

@@ -1,0 +1,4 @@
+{"outputs":[0],"leaks":[],"graph":[[],[0]],"inputs":[],"result":{"(1, 0)":"globally"}}
+{"outputs":[0],"leaks":[],"graph":[[],[0]],"inputs":[],"result":{"(1, 0)":"globally"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0]],"inputs":[],"result":{"(0, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1],[0]],"inputs":[],"result":{"(0, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
