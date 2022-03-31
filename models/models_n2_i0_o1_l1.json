@@ -1,4 +1,4 @@
-{"graph": [[], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0]], "inputs": [], "outputs": [0], "leaks": []}
+{"graph": [[], [0]], "inputs": [], "outputs": [0], "leaks": [0]}
+{"graph": [[], [0]], "inputs": [], "outputs": [0], "leaks": [1]}
+{"graph": [[1], [0]], "inputs": [], "outputs": [0], "leaks": [0]}
+{"graph": [[1], [0]], "inputs": [], "outputs": [0], "leaks": [1]}

@@ -1,18 +1,18 @@
-{"graph": [[], [0], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[], [0], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[], [2], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[], [0], [1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0], [0]], "inputs": [], "outputs": [1], "leaks": []}
-{"graph": [[1], [0], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [2], [0]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [1], "leaks": []}
-{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [2], "leaks": []}
-{"graph": [[1], [0, 2], [1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0, 2], [1]], "inputs": [], "outputs": [1], "leaks": []}
-{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
-{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [1], "leaks": []}
-{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [2], "leaks": []}
-{"graph": [[1, 2], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": []}
+{"graph": [[], [0], [0]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[], [0], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[], [2], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[], [0], [1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [0], [0]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [0], [0]], "inputs": [], "outputs": [1], "leaks": [0, 1, 2]}
+{"graph": [[1], [0], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [2], [0]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [1], "leaks": [0, 1, 2]}
+{"graph": [[1], [2], [0, 1]], "inputs": [], "outputs": [2], "leaks": [0, 1, 2]}
+{"graph": [[1], [0, 2], [1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [0, 2], [1]], "inputs": [], "outputs": [1], "leaks": [0, 1, 2]}
+{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}
+{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [1], "leaks": [0, 1, 2]}
+{"graph": [[1], [0, 2], [0, 1]], "inputs": [], "outputs": [2], "leaks": [0, 1, 2]}
+{"graph": [[1, 2], [0, 2], [0, 1]], "inputs": [], "outputs": [0], "leaks": [0, 1, 2]}

@@ -41,7 +41,7 @@ def json_write(models, filename):
             temp['graph'] = list(model.graph)
             temp['inputs'] = list(model.inputs)
             temp['outputs'] = list(model.outputs)
-            temp['leaks'] = list(model.inputs)
+            temp['leaks'] = list(model.leaks)
             
             json.dump(temp, file, cls=SetEncoder)
             file.write("\n")
