@@ -17,17 +17,23 @@ class LinearCompartmentModel:
         self.leaks = leaks #set of leak nodes
 
     def __eq__(self, other):
-        return compare_models(self, other)
+        return (self.graph == other.graph 
+                and self.inputs == other.inputs 
+                and self.outputs == other.outputs 
+                and self.leaks == other.leaks)
 
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
+    
+    def __hash__(self):
+        return hash((tuple(self.inputs), tuple(self.outputs), tuple(self.leaks)))
 
 def permute_set (s, permutation):
     """gives permutation as a new list"""
     # Gleb: one could use a comprehension `return {permutation[num] for num in s}`
-    res = set()
+    res = [] #changed from set to list
     for number in s:
-        res.add(permutation[number])
+        res.append(permutation[number]) #changed from set to list
     return res
 
 def permute_graph (graph, permutation):
@@ -40,7 +46,7 @@ def permute_graph (graph, permutation):
     return result_graph
 
 def compare_models (model_1, model_2):
-    """returns true if two graphs are the same, false otherwise"""
+    """returns true if two models are the same, false otherwise"""
     n = len(model_1.graph) #number of vertices
    
     vertices_list = list(range(n))
