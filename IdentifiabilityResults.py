@@ -7,9 +7,9 @@ import os
 import math
 
 #model has graph inputs outputs leaks
+    
+    
 
-#to do:
-    #add a strongly connected function
 
 class Data:
     
@@ -152,20 +152,32 @@ class Data:
                     len(m.outputs) >= outpmin and len(m.outputs) <= outpmax:
                         if 'strongly_connected' in params:
                             if params['strongly_connected'] == True:
-                                if self._strongly_connected(m):
-                                    res[m] = Data[m]
+                                if self._strongly_connected(m.graph):
+                                    res[m] = self.Data[m]
                         else:
                             res[m] = self.Data[m]
                             
         return res
     
     def _strongly_connected(self, graph):
-            pass
+            for i in range(len(graph)):
+                visited = set()
+                self._strongly_connected_rec(graph, i, visited)
+                if len(visited) != len(graph):
+                    return False
+            return True
+
+    def _strongly_connected_rec(self, graph, vertex, visited):
+        visited.add(vertex)
+        for u in graph[vertex]:
+            if u not in visited:
+                self._strongly_connected_rec(graph, u, visited)
+
         
-    def check4_5(self, res):
-        """res = D.filterby(nleaks = 1, inputs_at_least = 1)"""
+    def check4_5(self, fmodels):
+        """fmodels = D.filterby(nleaks = 1, inputs_at_least = 1)"""
         r = []
-        for k, v in res.items():
+        for k, v in fmodels.items():
             checks = []
             for i, j in v.items():
                 if j == "locally":
@@ -180,5 +192,14 @@ class Data:
                     print('SOMETHING IS PROBABLY WRONG')
                     r.append(k)
         return r
+    
+    
+D = Data('results')
+
+k = k = D.filterby(nleaks = 1, inputs_at_least = 1, strongly_connected = True)
+
+print(D.check4_5(k))
+
+#some of the parameters are locally identifiable in the initial model, but globally identifiable in the resulting model
         
         
