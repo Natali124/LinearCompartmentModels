@@ -37,7 +37,7 @@ class Data:
         Only works under 10 (0 through 9) vertices
         Possible bug: returns in list notation, not with ( ) s, not changing yet because I'm not sure what is the best
         """
-        for modper in self._generate_model_isomorphisms(model):
+        for modper in model.generate_model_isomorphisms():
             if modper[0] in self.Data:
                 bpermd = self.Data[modper[0]]
                 d = dict()
@@ -57,7 +57,7 @@ class Data:
                     d[r] = v
                 return d
             
-        print('NOT FOUND')
+        raise KeyError('Model not found in data')
         
     def _inverse_permutation(self, p):
         r = [0] * len(p)
@@ -67,115 +67,21 @@ class Data:
             k += 1
         return r
     
-    def _generate_model_isomorphisms(self, base_model):
-        """
-        generates all isomorphisms of a model in a sorted way
-        result is a list of tuples - model and permutation
-        """
-        
-        result = []
-        n = len(base_model.graph)
-       
-        vertices_list = list(range(n))
-        permutations_object = itertools.permutations(vertices_list)
-        #creating a permutations object
-        
-        for permutation in permutations_object:
-            model_new = LinearCompartmentModel(permute_graph(base_model.graph,permutation), 
-                                               permute_set(base_model.inputs, permutation),
-                                               permute_set(base_model.outputs, permutation),
-                                               permute_set(base_model.leaks, permutation)
-                                               )
-            result.append((model_new, permutation))
-       
-        return result
-    
-    def filterby(self, **params):
-        """
-        ninputs = int
-        noutputs = int
-        nleaks = int
-        
-        inputs_at_least = int
-        outputs_at_least = int
-        leaks_at_least = int
-        
-        inputs_at_most = int
-        outputs_at_most = int
-        outputs_at_most = int
-        
-        strongly_connected = True (default is False)
-        """
-        #set up:
+    def filterby(self, f):
+        filt = filter(f, self.Data)
         res = dict()
-        #inputs
-        inpmax = math.inf
-        inpmin = -math.inf
-        
-        if 'ninputs' in params:
-            inpmax = params['ninputs']
-            inpmin = inpmax
-        else:
-            if 'inputs_at_least' in params:
-                inpmin = params['inputs_at_least']
-            if 'inputs_at_most' in params:
-                inpmax = params['inputs_at_most']
-        #outputs
-        outpmax = math.inf
-        outpmin = -math.inf
-        
-        if 'noutputs' in params:
-            outpmax = params['noutputs']
-            outpmin = outpmax
-        else:
-            if 'outputs_at_least' in params:
-                outpmin = params['outputs_at_least']
-            if 'outputs_at_most' in params:
-                inpmax = params['outputs_at_most']
-        #leaks
-        leaksmin = math.inf
-        leaksmax = -math.inf
-        
-        if 'nleaks' in params:
-            leaksmin = params['nleaks']
-            leaksmax = leaksmin
-        else:
-            if 'leaks_at_least' in params:
-                leaksmin = params['leaks_at_least']
-            if 'leaks_at_most' in params:
-                leaksmax = params['leaks_at_most']
-                
-        
-        for m in self.Data:
-            if len(m.leaks) >= leaksmin and len(m.leaks) <= leaksmax and \
-                len(m.inputs) >= inpmin and len(m.inputs) <= inpmax and \
-                    len(m.outputs) >= outpmin and len(m.outputs) <= outpmax:
-                        if 'strongly_connected' in params:
-                            if params['strongly_connected'] == True:
-                                if self._strongly_connected(m.graph):
-                                    res[m] = self.Data[m]
-                        else:
-                            res[m] = self.Data[m]
-                            
+        for item in filt:
+            res[item] = self.Data[item]
         return res
-    
-    def _strongly_connected(self, graph):
-            for i in range(len(graph)):
-                visited = set()
-                self._strongly_connected_rec(graph, i, visited)
-                if len(visited) != len(graph):
-                    return False
-            return True
-
-    def _strongly_connected_rec(self, graph, vertex, visited):
-        visited.add(vertex)
-        for u in graph[vertex]:
-            if u not in visited:
-                self._strongly_connected_rec(graph, u, visited)
 
         
-    def check4_5(self, fmodels):
+    def check4_5(self):
         """fmodels = D.filterby(nleaks = 1, inputs_at_least = 1)"""
+        def f(m):
+            return len(m.leaks) == 1 and len(m.inputs) >= 1
+        
+        fmodels = self.filterby(f)
+        
         r = []
         for k, v in fmodels.items():
             checks = []
@@ -196,9 +102,7 @@ class Data:
     
 D = Data('results')
 
-k = k = D.filterby(nleaks = 1, inputs_at_least = 1, strongly_connected = True)
-
-print(D.check4_5(k))
+print(D.check4_5())
 
 #some of the parameters are locally identifiable in the initial model, but globally identifiable in the resulting model
         

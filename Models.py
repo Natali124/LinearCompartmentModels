@@ -27,6 +27,43 @@ class LinearCompartmentModel:
     
     def __hash__(self):
         return hash((tuple(self.inputs), tuple(self.outputs), tuple(self.leaks)))
+    
+    def generate_model_isomorphisms(self):
+        """
+        generates all isomorphisms of a model in a sorted way
+        result is a list of tuples - model and permutation
+        """
+        
+        result = []
+        n = len(self.graph)
+       
+        vertices_list = list(range(n))
+        permutations_object = itertools.permutations(vertices_list)
+        #creating a permutations object
+        
+        for permutation in permutations_object:
+            model_new = LinearCompartmentModel(permute_graph(self.graph,permutation), 
+                                               permute_set(self.inputs, permutation),
+                                               permute_set(self.outputs, permutation),
+                                               permute_set(self.leaks, permutation)
+                                               )
+            result.append((model_new, permutation))
+       
+        return result
+    
+    def strongly_connected(self):
+            for i in range(len(self.graph)):
+                visited = set()
+                self._strongly_connected_rec(i, visited)
+                if len(visited) != len(self.graph):
+                    return False
+            return True
+
+    def _strongly_connected_rec(self, vertex, visited):
+        visited.add(vertex)
+        for u in self.graph[vertex]:
+            if u not in visited:
+                self._strongly_connected_rec(u, visited)
 
 def permute_set (s, permutation):
     """gives permutation as a new list"""
