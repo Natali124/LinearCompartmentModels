@@ -47,14 +47,18 @@ end
 # Checks identifiability for all the models in `fname` and writes a result into a file in `dest_folder`
 function process_file(fname, dest_dir)
     println("Processing $fname")
+    out_fname = dest_dir * split(split(fname, "/")[end], ".")[1] * "_result.json"
+    if isfile(out_fname)
+        println("Already processed, skipping")
+        return 
+    end
     models = read_models(fname)
     for (i, m) in enumerate(models)
         println("\tProcessing model $i out of $(length(models))")
         result = run_model(m["graph"], m["inputs"], m["outputs"], m["leaks"])
         m["result"] = result
    end
-
-   out_fname = dest_dir * split(split(fname, "/")[end], ".")[1] * "_result.json"
+   
    open(out_fname, "w") do f
        for m in models
            write(f, JSON.json(m))

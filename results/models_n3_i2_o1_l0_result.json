@@ -46,5 +46,5 @@
 {"outputs":[0],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[1,2],"result":{"(1, 2)":"locally","(2, 0)":"globally","(0, 1)":"locally","(2, 1)":"locally","(1, 0)":"globally"}}
 {"outputs":[1],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[1,2],"result":{"(1, 2)":"locally","(2, 0)":"locally","(0, 1)":"locally","(2, 1)":"globally","(1, 0)":"locally"}}
 {"outputs":[2],"leaks":[],"graph":[[1],[0,2],[0,1]],"inputs":[1,2],"result":{"(1, 2)":"globally","(2, 0)":"globally","(0, 1)":"globally","(2, 1)":"globally","(1, 0)":"globally"}}
-{"outputs":[0],"leaks":[],"graph":[[1,2],[0,2],[0,1]],"inputs":[0,1],"result":{"(1, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 2)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"globally"}}
-{"outputs":[2],"leaks":[],"graph":[[1,2],[0,2],[0,1]],"inputs":[0,1],"result":{"(1, 2)":"globally","(2, 0)":"nonidentifiable","(0, 2)":"globally","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
+{"outputs":[0],"leaks":[],"graph":[[1,2],[0,2],[0,1]],"inputs":[0,1],"result":{"(1, 2)":"nonidentifiable","(0, 2)":"nonidentifiable","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"globally"}}
+{"outputs":[2],"leaks":[],"graph":[[1,2],[0,2],[0,1]],"inputs":[0,1],"result":{"(1, 2)":"globally","(0, 2)":"globally","(2, 0)":"nonidentifiable","(0, 1)":"nonidentifiable","(2, 1)":"nonidentifiable","(1, 0)":"nonidentifiable"}}
