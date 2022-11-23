@@ -93,7 +93,7 @@ function polys_match(poly1, poly2)
         for i in 1:length(p)
             evald[params1[i]] = p[i]
         end
-        if poly1 == eval_at_dict(poly2, evald)
+        if eval_at_dict(poly1, evald) == poly2
             return true
         end
     end
@@ -103,17 +103,21 @@ end
 # -----------------------------------------------------------------------------
 
 io_collection = Dict()
-fnames = ["models/models_n2_i0_o1_l0.json"]
+folder = "models/"
+files = [
+    "models_n3_i0_o1_l0.json",
+    "models_n3_i0_o1_l1.json",
+    "models_n3_i0_o1_l2.json",
+    "models_n3_i0_o1_l3.json"
+]
+fnames = [folder * fname for fname in files]
 
 for f in fnames
     get_ioeqs!(io_collection, f)
 end
 
-println(io_collection)
-
 buckets = []
 for (k, v) in io_collection
-    println(k, v)
     added = false
     for b in buckets
         if polys_match(v, b[end][2])
@@ -125,6 +129,11 @@ for (k, v) in io_collection
     if !added
         push!(buckets, [(k, v)])
     end
+    println("Processed")
 end
-
-println(buckets)
+for b in buckets
+    println("Bucket of length $(length(b))")
+    for m in b
+        println(m)
+    end
+end
