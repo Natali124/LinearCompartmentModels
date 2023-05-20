@@ -19,11 +19,18 @@ class LinearCompartmentModel:
     def __eq__(self, other):
         return compare_models(self, other)
 
+    def __signature(self):
+        return (tuple(sorted(self.outputs)), tuple(sorted(self.inputs)), tuple(sorted(self.leaks)))
+
+    def __lt__(self, other):
+        "for deciding which model to keep in the equivalence class"
+        return self.__signature() < other.__signature()
+
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
     
     def __hash__(self):
-        return hash((tuple(self.inputs), tuple(self.outputs), tuple(self.leaks)))
+        return hash(self.__signature())
     
     def generate_model_isomorphisms(self):
         """

@@ -18,11 +18,11 @@
 {"graph": [[1], [0], [0]], "inputs": [2], "outputs": [0], "leaks": []}
 {"graph": [[1], [0], [0]], "inputs": [2], "outputs": [1], "leaks": []}
 {"graph": [[1], [0], [0, 1]], "inputs": [0], "outputs": [0], "leaks": []}
-{"graph": [[1], [0], [0, 1]], "inputs": [0], "outputs": [1], "leaks": []}
+{"graph": [[1], [0], [0, 1]], "inputs": [1], "outputs": [0], "leaks": []}
 {"graph": [[1], [0], [0, 1]], "inputs": [2], "outputs": [0], "leaks": []}
 {"graph": [[1], [2], [0]], "inputs": [0], "outputs": [0], "leaks": []}
-{"graph": [[1], [2], [0]], "inputs": [0], "outputs": [1], "leaks": []}
-{"graph": [[1], [2], [0]], "inputs": [0], "outputs": [2], "leaks": []}
+{"graph": [[1], [2], [0]], "inputs": [2], "outputs": [0], "leaks": []}
+{"graph": [[1], [2], [0]], "inputs": [1], "outputs": [0], "leaks": []}
 {"graph": [[1], [2], [0, 1]], "inputs": [0], "outputs": [0], "leaks": []}
 {"graph": [[1], [2], [0, 1]], "inputs": [0], "outputs": [1], "leaks": []}
 {"graph": [[1], [2], [0, 1]], "inputs": [0], "outputs": [2], "leaks": []}
@@ -34,7 +34,7 @@
 {"graph": [[1], [2], [0, 1]], "inputs": [2], "outputs": [2], "leaks": []}
 {"graph": [[1], [0, 2], [1]], "inputs": [0], "outputs": [0], "leaks": []}
 {"graph": [[1], [0, 2], [1]], "inputs": [0], "outputs": [1], "leaks": []}
-{"graph": [[1], [0, 2], [1]], "inputs": [0], "outputs": [2], "leaks": []}
+{"graph": [[1], [0, 2], [1]], "inputs": [2], "outputs": [0], "leaks": []}
 {"graph": [[1], [0, 2], [1]], "inputs": [1], "outputs": [0], "leaks": []}
 {"graph": [[1], [0, 2], [1]], "inputs": [1], "outputs": [1], "leaks": []}
 {"graph": [[1], [0, 2], [0, 1]], "inputs": [0], "outputs": [0], "leaks": []}
@@ -47,4 +47,4 @@
 {"graph": [[1], [0, 2], [0, 1]], "inputs": [2], "outputs": [1], "leaks": []}
 {"graph": [[1], [0, 2], [0, 1]], "inputs": [2], "outputs": [2], "leaks": []}
 {"graph": [[1, 2], [0, 2], [0, 1]], "inputs": [0], "outputs": [0], "leaks": []}
-{"graph": [[1, 2], [0, 2], [0, 1]], "inputs": [0], "outputs": [1], "leaks": []}
+{"graph": [[1, 2], [0, 2], [0, 1]], "inputs": [1], "outputs": [0], "leaks": []}

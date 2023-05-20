@@ -17,8 +17,10 @@ def generate_models(all_graphs, n_inputs, n_outputs, n_leaks):
                     model = LinearCompartmentModel(graph.list, inp, out, leak)
                     if all_reach_outputs(model.graph, model.outputs): #so that all vertices reach outputs
                         b = False
-                        for ex_model in temp:
-                            if model == ex_model:
+                        for i in range(len(temp)):
+                            if model == temp[i]:
+                                if model < temp[i]:
+                                    temp[i] = model
                                 b = True
                                 break
                         if b == False:
