@@ -17,10 +17,7 @@ class LinearCompartmentModel:
         self.leaks = leaks #set of leak nodes
 
     def __eq__(self, other):
-        return (self.graph == other.graph 
-                and self.inputs == other.inputs 
-                and self.outputs == other.outputs 
-                and self.leaks == other.leaks)
+        return compare_models(self, other)
 
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
@@ -65,15 +62,11 @@ class LinearCompartmentModel:
             if u not in visited:
                 self._strongly_connected_rec(u, visited)
 
-def permute_set (s, permutation):
+def permute_set(s, permutation):
     """gives permutation as a new list"""
-    # Gleb: one could use a comprehension `return {permutation[num] for num in s}`
-    res = [] #changed from set to list
-    for number in s:
-        res.append(permutation[number]) #changed from set to list
-    return res
+    return {permutation[num] for num in s}
 
-def permute_graph (graph, permutation):
+def permute_graph(graph, permutation):
     """returns a graph created by tranforming given model with given permutation"""
     result_graph = [None] * len(graph)
    
@@ -82,7 +75,7 @@ def permute_graph (graph, permutation):
         result_graph[permutation[i]] = permute_set(result_graph[permutation[i]], permutation)
     return result_graph
 
-def compare_models (model_1, model_2):
+def compare_models(model_1, model_2):
     """returns true if two models are the same, false otherwise"""
     n = len(model_1.graph) #number of vertices
    
@@ -127,7 +120,7 @@ def generate_all_isomorphisms(base_graph):
                 break
     return res
 
-def compare_graphs (graph_1, graph_2):
+def compare_graphs(graph_1, graph_2):
     """returns true if two graphs are the same, false otherwise"""
     n = len(graph_1) #number of vertices
    

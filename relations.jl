@@ -117,10 +117,10 @@ end
 io_collection = Dict()
 folder = "models/"
 files = [
-    #"models_n2_i1_o1_l0.json",
-    #"models_n2_i1_o1_l1.json",
-    #"models_n2_i1_o1_l2.json"
-    "models_n3_i1_o1_l0.json",
+    "models_n2_i1_o1_l0.json",
+    "models_n2_i1_o1_l1.json",
+    "models_n2_i1_o1_l2.json"
+    #"models_n3_i1_o1_l0.json",
     #"models_n3_i1_o1_l3.json"
 ]
 fnames = [folder * fname for fname in files]

@@ -8,7 +8,7 @@ try:
 except FileExistsError:
     pass
 
-MAX_N = 4
+MAX_N = 3
 
 for n in range(2, MAX_N + 1):
     graphs = generate_graphs(n)
