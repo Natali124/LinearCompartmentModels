@@ -115,7 +115,7 @@ end
 # -----------------------------------------------------------------------------
 
 io_collection = Dict()
-folder = "models/"
+folder = "../models/"
 files = [
     "models_n2_i1_o1_l0.json",
     "models_n2_i1_o1_l1.json",
