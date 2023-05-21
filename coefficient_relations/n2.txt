@@ -1,0 +1,76 @@
+Relations Any[U3, U2, U1, Y3, Y2 - 1] in 5 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, inputs at nodes 1
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, inputs at nodes 1
+    Edges from 0 : 1
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, 1, inputs at nodes 1
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 1, inputs at nodes 1
+    Edges from 0 : 1
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, 1, inputs at nodes 1
+    Edges from 0 : 1
+    Edges from 1 : 0
+========
+Relations Any[U3, U2, Y3, Y2 - 1] in 3 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, 1, inputs at nodes 0
+    Edges from 0 : 1
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, inputs at nodes 0
+    Edges from 0 : 1
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 1, inputs at nodes 0
+    Edges from 0 : 1
+    Edges from 1 : 0
+========
+Relations Any[U3, U2, Y3, Y2 - 1, Y0] in 1 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes , inputs at nodes 0
+    Edges from 0 : 1
+    Edges from 1 : 0
+========
+Relations Any[U3, U2, U1, Y3, Y2 - 1, Y0] in 3 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 1, inputs at nodes 1
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes , inputs at nodes 1
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes , inputs at nodes 1
+    Edges from 0 : 1
+    Edges from 1 : 0
+========
+Relations Any[U3, U2, Y3, Y2 - 1, Y1*U1 - U0, Y0] in 2 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes , inputs at nodes 0
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 1, inputs at nodes 0
+    Edges from 0 : 
+    Edges from 1 : 0
+========
+Relations Any[U3, U2, Y3, Y2 - 1, Y0*U1^2 - Y1*U0*U1 + U0^2] in 2 models
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, inputs at nodes 0
+    Edges from 0 : 
+    Edges from 1 : 0
+  Model of dimension 2
+    Outputs at nodes 0, leaks at nodes 0, 1, inputs at nodes 0
+    Edges from 0 : 
+    Edges from 1 : 0
+========

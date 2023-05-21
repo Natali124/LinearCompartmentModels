@@ -2,7 +2,7 @@ using Base.Filesystem
 using Nemo
 using JSON
 using StructuralIdentifiability: assess_identifiability, linear_compartment_model, var_to_str, find_ioequations, 
-    eval_at_dict, str_to_var, parent_ring_change
+    eval_at_dict, str_to_var, parent_ring_change, ODE
 using Groebner
 
 #F = GF(7879)
@@ -20,7 +20,7 @@ function run_model(graph, inputs, outputs, leaks)
     inputs_jl = Array{Int, 1}([i + 1 for i in inputs])
     outputs_jl = Array{Int, 1}([i + 1 for i in outputs])
 
-    model = linear_compartment_model(graph_jl, inputs_jl, outputs_jl, leaks_jl)
+    model = linear_compartment_model_extra(graph_jl, inputs_jl, outputs_jl, leaks_jl)
     ioeqs = find_ioequations(model)
     ioeq = first(values(ioeqs))
     leadvar = first(keys(ioeqs))
@@ -28,6 +28,60 @@ function run_model(graph, inputs, outputs, leaks)
     ioeq = parent_ring_change(ioeq, FFring) * (1 // F(coeff(ioeq, leadvar)))
 
     return ioeq
+end
+
+# -----------------------------------------------------------------------------
+
+function linear_compartment_model_extra(graph, inputs, outputs, leaks)
+    "Adapted from StructuralIdentifiability.jl"
+    n = length(graph)
+    x_vars_names = ["x$i" for i in 1:n]
+    y_vars_names = ["y$i" for i in outputs]
+    u_vars_names = ["u$i" for i in inputs]
+    edges_vars_names = Array{String, 1}()
+    for i in 1:n
+        for j in graph[i]
+            push!(edges_vars_names, "a_$(j)_$(i)")
+        end
+    end
+    for s in leaks
+        push!(edges_vars_names, "a_0_$(s)")
+    end
+    for u in inputs
+        push!(edges_vars_names, "b_$u")
+    end
+
+    R, vars = PolynomialRing(
+        QQ, vcat(x_vars_names, y_vars_names, u_vars_names, edges_vars_names),
+    )
+    x_vars = @view vars[1:n]
+    x_equations = Dict{fmpq_mpoly, Union{fmpq_mpoly, Generic.Frac{fmpq_mpoly}}}(
+        x => R(0) for x in x_vars
+    )
+    for i in 1:n
+        for j in graph[i]
+            rate = str_to_var("a_$(j)_$(i)", R)
+            x_equations[x_vars[j]] += x_vars[i] * rate
+            x_equations[x_vars[i]] -= x_vars[i] * rate
+        end
+        if i in leaks
+            rate = str_to_var("a_0_$(i)", R)
+            x_equations[x_vars[i]] += -x_vars[i] * rate
+        end
+        if i in inputs
+                x_equations[x_vars[i]] += str_to_var("b_$i", R) * str_to_var("u$i", R)
+        end
+    end
+
+    y_equations = Dict{fmpq_mpoly, Union{fmpq_mpoly, Generic.Frac{fmpq_mpoly}}}(
+        str_to_var("y$i", R) => str_to_var("x$i", R) for i in outputs
+    )
+
+    return ODE{fmpq_mpoly}(
+        x_equations,
+        y_equations,
+        Array{fmpq_mpoly}([str_to_var("u$i", R) for i in inputs]),
+    )
 end
 
 # -----------------------------------------------------------------------------
@@ -70,14 +124,14 @@ end
 
 function get_vars(poly)
     total = vars(poly)
-    params = [v for v in total if var_to_str(v)[1] == 'a']
+    params = [v for v in total if var_to_str(v)[1] in ('a', 'b')]
     iovars = [v for v in total if !(v in params)]
 
     return (params, iovars)
 end
 
 function get_coeff(p, letter, ord)
-        vind = findfirst(v -> (var_to_str(v)[1] == letter) && endswith(var_to_str(v), "$ord"), vars(p))
+    vind = findfirst(v -> (var_to_str(v)[1] == letter) && endswith(var_to_str(v), "$ord"), vars(p))
     if isnothing(vind)
         return zero(parent(p))
     end
