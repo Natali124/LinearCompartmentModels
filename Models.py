@@ -84,6 +84,8 @@ def permute_graph(graph, permutation):
 
 def compare_models(model_1, model_2):
     """returns true if two models are the same, false otherwise"""
+    if len(model_1.graph) != len(model_2.graph):
+        return False
     n = len(model_1.graph) #number of vertices
    
     vertices_list = list(range(n))
