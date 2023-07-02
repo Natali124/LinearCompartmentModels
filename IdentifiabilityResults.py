@@ -92,7 +92,7 @@ class Data:
             for i in checks:
                 if '-1' in i:
                     continue
-                elif self.Data[new_m][i] == 'locally':
+                elif self._get_result(new_m)[i] == 'locally':
                     print('WORKED')
                 else:
                     print('SOMETHING IS PROBABLY WRONG')

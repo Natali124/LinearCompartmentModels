@@ -29,8 +29,10 @@ class LinearCompartmentModel:
     def __repr__(self):
         return f'Graph: {self.graph}, Inputs: {self.inputs}, Outputs: {self.outputs}, Leaks: {self.leaks}'
     
+    # NB: this hash is not isomorphism-preserving !
     def __hash__(self):
-        return hash(self.__signature())
+        graph_tuple = tuple(map(tuple, map(sorted, self.graph)))
+        return hash(tuple(list(self.__signature()) + [graph_tuple]))
     
     def generate_model_isomorphisms(self):
         """
