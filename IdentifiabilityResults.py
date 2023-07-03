@@ -51,9 +51,9 @@ class Data:
                     if r2 == -1:
                         r = permute_set([r1], self._inverse_permutation(modper[1]))
                         r.append(-1)
-                        r = str(r)
+                        r = str(tuple(r))
                     else:
-                        r = str(permute_set(k, self._inverse_permutation(modper[1])))
+                        r = str(tuple(permute_set(k, self._inverse_permutation(modper[1]))))
                     d[r] = v
                 return d
             
@@ -92,7 +92,7 @@ class Data:
             for i in checks:
                 if '-1' in i:
                     continue
-                elif self._get_result(new_m)[i] == 'locally':
+                elif self[new_m][i] == 'locally':
                     print('WORKED')
                 else:
                     print('SOMETHING IS PROBABLY WRONG')

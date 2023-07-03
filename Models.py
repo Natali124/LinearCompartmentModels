@@ -11,10 +11,10 @@ class LinearCompartmentModel:
     """
 
     def __init__(self, graph, inputs, outputs, leaks):
-        self.graph = graph #array of integer sets representing the adjacency lists of the graph
-        self.inputs = inputs #set of input nodes
-        self.outputs = outputs #set of output nodes
-        self.leaks = leaks #set of leak nodes
+        self.graph = [set(l) for l in graph] #array of integer sets representing the adjacency lists of the graph
+        self.inputs = set(inputs) #set of input nodes
+        self.outputs = set(outputs) #set of output nodes
+        self.leaks = set(leaks) #set of leak nodes
 
     def __eq__(self, other):
         return compare_models(self, other)
