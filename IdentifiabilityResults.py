@@ -35,7 +35,6 @@ class Data:
     def _get_result(self, model):
         """
         Only works under 10 (0 through 9) vertices
-        Possible bug: returns in list notation, not with ( ) s, not changing yet because I'm not sure what is the best
         """
         for modper in model.generate_model_isomorphisms():
             if modper[0] in self.Data:
@@ -78,7 +77,7 @@ class Data:
     def check4_5(self):
         """fmodels = D.filterby(nleaks = 1, inputs_at_least = 1)"""
         def f(m):
-            return len(m.leaks) == 1 and len(m.inputs) >= 1
+            return len(m.leaks) == 1 and len(m.inputs) >= 1 and len(m.graph) <= 3
         
         fmodels = self.filterby(f)
         
@@ -86,24 +85,23 @@ class Data:
         for k, v in fmodels.items():
             checks = []
             for i, j in v.items():
-                if j == "locally":
+                if j == "locally" or j == 'globally':
                     checks.append(i)
             new_m = LinearCompartmentModel(k.graph, k.inputs, k.outputs, [])
             for i in checks:
                 if '-1' in i:
                     continue
-                elif self[new_m][i] == 'locally':
-                    print('WORKED')
-                else:
-                    print('SOMETHING IS PROBABLY WRONG')
+                elif i not in self[new_m]:
+                    continue
+                elif self[new_m][i] == 'locally' or self[new_m][i] == 'globally':
+                    #print('WORKED')
+                    continue
+                elif self[new_m][i] == 'nonidentifiable':
+                    #print('SOMETHING IS WRONG')
                     r.append(k)
         return r
     
     
 D = Data('results')
 
-print(D.check4_5())
-
-#some of the parameters are locally identifiable in the initial model, but globally identifiable in the resulting model
-        
-        
+print(len(D.check4_5()))
