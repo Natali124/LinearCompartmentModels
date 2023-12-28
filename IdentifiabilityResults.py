@@ -7,9 +7,6 @@ import os
 import math
 
 #model has graph inputs outputs leaks
-    
-    
-
 
 class Data:
     
@@ -31,11 +28,16 @@ class Data:
                 
     def __getitem__(self, key):
         return self._get_result(key)
+
+    def __iter__(self):
+        return iter(self.Data.items())
     
     def _get_result(self, model):
         """
         Only works under 10 (0 through 9) vertices
         """
+        if model in self.Data:
+            return self.Data[model]
         for modper in model.generate_model_isomorphisms():
             if modper[0] in self.Data:
                 bpermd = self.Data[modper[0]]
@@ -111,17 +113,4 @@ class Data:
     
 D = Data('results')
 
-#print(len(D.check4_5()))
-
-model = LinearCompartmentModel([[1], [0]], [0, 1], [0], [1])
-print(model)
-
-print()
-print(D[model])
-print()
-
-model2 = LinearCompartmentModel([[0], [1]], [1, 0], [1], [0])
-print(model2)
-print()
-print(D[model2])
-#print(D.Data[model2])
+print(len(D.check4_5()))
