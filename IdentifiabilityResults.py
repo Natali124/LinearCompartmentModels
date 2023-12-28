@@ -5,6 +5,7 @@ import itertools
 import json
 import os
 import math
+import numpy as np
 
 #model has graph inputs outputs leaks
 
@@ -91,26 +92,76 @@ class Data:
         fmodels = self.filterby(f)
         
         r = []
-        for k, v in fmodels.items():
+        for model, result in fmodels.items():
             checks = []
-            for i, j in v.items():
-                if j == "locally" or j == 'globally':
-                    checks.append(i)
-            new_m = LinearCompartmentModel(k.graph, k.inputs, k.outputs, [])
-            for i in checks:
-                if '-1' in i:
+
+            for parameter, identifiability in result.items():
+                if identifiability == 'locally' or identifiability == 'globally':
+                    checks.append(parameter)
+            new_m = LinearCompartmentModel(model.graph, model.inputs, model.outputs, [])
+
+            b = False
+
+            for parameter in checks:
+                if parameter not in self[new_m]:
                     continue
-                elif i not in self[new_m]:
-                    continue
-                elif self[new_m][i] == 'locally' or self[new_m][i] == 'globally':
+                elif self[new_m][parameter] == 'locally' or self[new_m][parameter] == 'globally':
                     #print('WORKED')
                     continue
-                elif self[new_m][i] == 'nonidentifiable':
+                elif self[new_m][parameter] == 'nonidentifiable':
                     #print('SOMETHING IS WRONG')
-                    r.append(k)
+                    b = True
+            
+            if b:
+                r.append(model)
         return r
     
     
 D = Data('results')
 
 print(len(D.check4_5()))
+
+# models = []
+# results = []
+
+# for model, result in D:
+#     models.append(model)
+#     b = False
+#     loc = False
+#     glob = False
+#     for parameter, identifiability in result.items():
+#         if identifiability == 'nonidentifiable':
+#             b = True
+#             break
+#         elif identifiability == 'locally':
+#             loc = True
+#         elif identifiability == 'globally':
+#             glob = True
+
+#     if b:
+#         results.append('nonidentifiable')
+#     elif loc:
+#         results.append('locally')
+#     elif glob:
+#         results.append('globally')
+#     else:
+#         raise KeyError("Something is wrong")
+
+# mat = np.zeros((3, 5))
+
+# for i in range(len(models)):
+#     model = models[i]
+#     result = results[i]
+#     if result == 'nonidentifiable':
+#         mat[len(model.inputs), len(model.leaks)] += 1
+
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+
+# sns.heatmap(mat, annot=True, cmap='viridis', fmt='g', cbar=True)
+
+# plt.xlabel('Inputs')
+# plt.ylabel('Leaks')
+# plt.title('Number of instances - Non-identifiable')
+
+# plt.show()
