@@ -39,21 +39,28 @@ class Data:
         for modper in model.generate_model_isomorphisms():
             if modper[0] in self.Data:
                 bpermd = self.Data[modper[0]]
+
                 d = dict()
-                for (k, v) in bpermd.items():
-                    r1 = int(k[1])
-                    if k[4] == '-':
+                for (parameter, identifiability) in bpermd.items():
+                    r1 = int(parameter[1])
+                    if parameter[4] == '-':
                         r2 = -1
                     else:
-                        r2 = int(k[4])
-                    k = [r1, r2]
+                        r2 = int(parameter[4])
+                    parameter = (r1, r2)
+                    # parameter is parsed, tuple of ints instead of string
                     if r2 == -1:
+                        # if contains leak...
                         r = permute_set([r1], self._inverse_permutation(modper[1]))
-                        r.append(-1)
+                        r.add(-1)
                         r = str(tuple(r))
                     else:
-                        r = str(tuple(permute_set(k, self._inverse_permutation(modper[1]))))
-                    d[r] = v
+                        inv_perm = self._inverse_permutation(modper[1])
+                        temp1 = inv_perm[r1]
+                        temp2 = inv_perm[r2]
+
+                        r = str((temp1, temp2))
+                    d[r] = identifiability
                 return d
             
         raise KeyError('Model not found in data')
@@ -104,4 +111,17 @@ class Data:
     
 D = Data('results')
 
-print(len(D.check4_5()))
+#print(len(D.check4_5()))
+
+model = LinearCompartmentModel([[1], [0]], [0, 1], [0], [1])
+print(model)
+
+print()
+print(D[model])
+print()
+
+model2 = LinearCompartmentModel([[0], [1]], [1, 0], [1], [0])
+print(model2)
+print()
+print(D[model2])
+#print(D.Data[model2])

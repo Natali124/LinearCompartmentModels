@@ -80,8 +80,9 @@ def permute_graph(graph, permutation):
     result_graph = [None] * len(graph)
    
     for i in range(len(graph)):
-        result_graph[permutation[i]] = copy.deepcopy(graph[i])
-        result_graph[permutation[i]] = permute_set(result_graph[permutation[i]], permutation)
+        graph_here = copy.deepcopy(graph[permutation[i]])
+        result_graph[permutation[i]] = permute_set(graph_here, permutation)
+
     return result_graph
 
 def compare_models(model_1, model_2):
