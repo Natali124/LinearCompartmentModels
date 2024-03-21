@@ -7,11 +7,13 @@ The easiest way to query the database is to use class `Data` from the file `Iden
 
 Following prepares an object D of Data class with all our data:
 
-`D = Data('results')`
+```python
+D = Data('results')
+```
 
 Now we could use the following code to find all models with 2 nodes and 1 leak which have at least one globally identifiable parameter.
 
-```
+```python
 def condition(m):
     return len(m.leaks) == 1 and len(m.graph) == 2
 
@@ -29,7 +31,7 @@ for model, result in filtered_models.items():
 ```
 
 This will give us the following output:
-```
+```python
 Model: Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {0}
 Result: {'(0, -1)': 'globally', '(1, 0)': 'globally'}
 
@@ -46,7 +48,7 @@ Result: {'(0, -1)': 'globally', '(0, 1)': 'globally', '(1, 0)': 'globally'}
 ```
 
 Also, we can use any model with up to 4 nodes as a key:
-```
+```python
 model1 = LinearCompartmentModel([[1], [0]], [0, 1], [0], [1])
 print(model1)
 print(D[model1])
@@ -57,7 +59,7 @@ print(D[model2])
 ```
 
 This gives the following output:
-```
+```python
 Graph: [{1}, {0}], Inputs: {0, 1}, Outputs: {0}, Leaks: {1}
 {'(1, -1)': 'globally', '(0, 1)': 'globally', '(1, 0)': 'globally'}
 
@@ -66,7 +68,7 @@ Graph: [{0}, {1}], Inputs: {0, 1}, Outputs: {1}, Leaks: {0}
 ```
 
 We can also directly iterate over (model, result) pairs to achieve the same result as above:
-```
+```python
 for model, result in D:
     if len(model.leaks) == 1 and len(model.graph) == 2:
         found = False
@@ -89,7 +91,7 @@ Below we present files with important functions.
 ### GeneratingGraphs.py
 - generate_graphs(n) - generates a list of all possible graphs with n vertices and no loops.
 Example:
-```
+```python
 generate_graphs(2)
 -> {[set(), {0}], [{1}, {0}]}
 ```
@@ -98,7 +100,7 @@ Note: Resulting graphs are not lists of sets. They are in the form of Graph obje
 ### Models.py
 - class LinearCompartmentModel. Constructor: (graph, inputs, outputs, leaks).
 Example:
-```
+```python
 m = LinearCompartmentModel([{1}, {0,2}, {1}], {0}, {1}, {2})
 print(m)
 -> Graph: [{1}, {0, 2}, {1}], Inputs: {0}, Outputs: {1}, Leaks: {2}
@@ -106,7 +108,7 @@ print(m)
 
 ### GeneratingModels.py
 - generate_models(all_graphs, n_inputs, n_outputs, n_leaks) - generates models up to isomorphism. all_graphs is a list of graphs that will be used (e.g. output of generate_graphs function).
-```
+```python
 generate_models(generate_graphs(2), 1, 1, 1)
 -> [Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {0},
    Graph: [set(), {0}], Inputs: {0}, Outputs: {0}, Leaks: {1},
@@ -119,7 +121,7 @@ generate_models(generate_graphs(2), 1, 1, 1)
 ```
 - json_write(model, filename) - writes a list of models in the file. Sets in graphs become lists for easier translation to json format.
 Example:
-```
+```python
 models = generate_models(generate_graphs(2), 1, 1, 1)
 json_write(models, 'models.json') #writes models in m into models.json file.
 ```
@@ -128,13 +130,13 @@ json_write(models, 'models.json') #writes models in m into models.json file.
 
 - all_reach_outputs(graph, outputs) - checks if all nodes reach outputs.
 Example:
-```
+```python
 all_reach_outputs([{1}, set()], {0}) == False # True
 all_reach_outputs([{1}, set()], {1}) == True # True
 ```
 - is_connected(graph) - checks if graph is weakly connected. graph is a list of sets.
 Example:
-```
+```python
 is_connected([{1}, set(), set()]) == False # True
 is_connected([{1}, set(), {1}]) == True # True
 ```
