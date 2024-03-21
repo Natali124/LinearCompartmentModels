@@ -1,7 +1,7 @@
 import copy
 from itertools import chain, combinations
 from Models import compare_graphs
-from Bfs import is_connected
+from graph_helpers import is_connected
 
 
 #region

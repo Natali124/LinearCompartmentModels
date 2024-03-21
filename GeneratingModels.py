@@ -1,7 +1,7 @@
 from Models import LinearCompartmentModel
 from GeneratingGraphs import combinations
 from GeneratingGraphs import generate_graphs
-from Bfs import all_reach_outputs
+from graph_helpers import all_reach_outputs
 import copy
 import json
 

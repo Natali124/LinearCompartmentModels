@@ -124,7 +124,7 @@ models = generate_models(generate_graphs(2), 1, 1, 1)
 json_write(models, 'models.json') #writes models in m into models.json file.
 ```
 
-### Bfs.py
+### graph_helpers.py
 
 - all_reach_outputs(graph, outputs) - checks if all nodes reach outputs.
 Example:
