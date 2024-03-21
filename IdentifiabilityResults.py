@@ -121,6 +121,8 @@ D = Data('results')
 
 print(len(D.check4_5()))
 
+### Uncomment for drawing a heatmap
+
 # models = []
 # results = []
 
