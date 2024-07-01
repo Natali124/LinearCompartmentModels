@@ -26,7 +26,7 @@ function run_model(graph, inputs, outputs, leaks)
     ioeqs = find_ioequations(model)
     ioeq = first(values(ioeqs))
     leadvar = first(keys(ioeqs))
-    FFring, _ = PolynomialRing(F, map(var_to_str, gens(parent(ioeq))))
+    FFring, _ = polynomial_ring(F, map(var_to_str, gens(parent(ioeq))))
     ioeq = parent_ring_change(ioeq, FFring) * (1 // F(coeff(ioeq, leadvar)))
 
     return ioeq
@@ -53,11 +53,11 @@ function linear_compartment_model_extra(graph, inputs, outputs, leaks)
         push!(edges_vars_names, "b_$u")
     end
 
-    R, vars = PolynomialRing(
+    R, vars = polynomial_ring(
         QQ, vcat(x_vars_names, y_vars_names, u_vars_names, edges_vars_names),
     )
     x_vars = @view vars[1:n]
-    x_equations = Dict{fmpq_mpoly, Union{fmpq_mpoly, Generic.Frac{fmpq_mpoly}}}(
+    x_equations = Dict{QQMPolyRingElem, Union{QQMPolyRingElem, Generic.FracFieldElem{QQMPolyRingElem}}}(
         x => R(0) for x in x_vars
     )
     for i in 1:n
@@ -75,14 +75,14 @@ function linear_compartment_model_extra(graph, inputs, outputs, leaks)
         end
     end
 
-    y_equations = Dict{fmpq_mpoly, Union{fmpq_mpoly, Generic.Frac{fmpq_mpoly}}}(
+    y_equations = Dict{QQMPolyRingElem, Union{QQMPolyRingElem, Generic.FracFieldElem{QQMPolyRingElem}}}(
         str_to_var("y$i", R) => str_to_var("x$i", R) for i in outputs
     )
 
-    return ODE{fmpq_mpoly}(
+    return ODE{QQMPolyRingElem}(
         x_equations,
         y_equations,
-        Array{fmpq_mpoly}([str_to_var("u$i", R) for i in inputs]),
+        Array{QQMPolyRingElem}([str_to_var("u$i", R) for i in inputs]),
     )
 end
 
@@ -210,18 +210,24 @@ function get_relations_ideal(p, maxord, R)
 
     (params, iovars1) = get_vars(p)
 
-    RR, _ = PolynomialRing(F, vcat(map(var_to_str, params), ["Y$i" for i in 0:maxord], ["U$i" for i in 0:maxord]))
-    eqs = []
+    RR, allvars = polynomial_ring(F, vcat(map(var_to_str, params), ["Y$i" for i in 0:maxord], ["U$i" for i in 0:maxord]))
+    new_params = allvars[1:length(params)]
+    YUs = allvars[(length(params) + 1):end]
+    eqs = Vector{QQMPolyRingElem}()
     for i in 0:maxord
         push!(eqs, str_to_var("Y$i", RR) - parent_ring_change(coeffs[i + 1], RR))
         push!(eqs, str_to_var("U$i", RR) - parent_ring_change(coeffs[i + maxord + 2], RR))
     end
 
+    """
     gbtask = @task begin; return groebner(eqs); end
-    gb = runTask(gbtask, 100)
+    gb = runTask(gbtask, 1000)
     if ismissing(gb)
         gb = []
     end
+    """
+    ord = ProductOrdering(DegRevLex(new_params), DegRevLex(YUs))
+    gb = groebner(eqs, ordering = ord)
     """
     @everywhere function ff()
         return groebner(eqs)
@@ -252,13 +258,13 @@ end
 io_collection = Dict()
 folder = "../models/"
 files = [
-    #"models_n2_i1_o1_l0.json",
-    #"models_n2_i1_o1_l1.json",
-    #"models_n2_i1_o1_l2.json"
-    "models_n3_i1_o1_l0.json",
-    "models_n3_i1_o1_l1.json",
-    "models_n3_i1_o1_l2.json",
-    "models_n3_i1_o1_l3.json"
+    "models_n2_i1_o1_l0.json",
+    "models_n2_i1_o1_l1.json",
+    "models_n2_i1_o1_l2.json"
+    #"models_n3_i1_o1_l0.json",
+    #"models_n3_i1_o1_l1.json",
+    #"models_n3_i1_o1_l2.json",
+    #"models_n3_i1_o1_l3.json"
 ]
 fnames = [folder * fname for fname in files]
 
@@ -266,8 +272,8 @@ for f in fnames
     get_ioeqs!(io_collection, f)
 end
 
-ord = 3
-R, _ = PolynomialRing(F, vcat(["Y$i" for i in 0:ord], ["U$i" for i in 0:ord]))
+ord = 2
+R, _ = polynomial_ring(F, vcat(["Y$i" for i in 0:ord], ["U$i" for i in 0:ord]))
 
 total = Dict()
 ind = 0
