@@ -1,9 +1,11 @@
 using Base.Filesystem
+using Dates
+using Distributed
 using Nemo
 using JSON
 using StructuralIdentifiability: assess_identifiability, linear_compartment_model, var_to_str, find_ioequations, 
     eval_at_dict, str_to_var, parent_ring_change, ODE
-using Groebner
+@everywhere using Groebner
 
 #F = GF(7879)
 F = QQ
@@ -122,6 +124,65 @@ end
 
 # -----------------------------------------------------------------------------
 
+# from https://stackoverflow.com/questions/53023386/set-a-time-limitation-on-algorithm-in-julia
+
+function run_with_timeout(timeout::Int,f::Function, wid::Int)
+    result = RemoteChannel(()->Channel{Tuple}(1));
+    @spawnat wid put!(result, (f(), myid()))
+    res = (:timeout, wid)
+    time_elapsed = 0.0
+    while time_elapsed < timeout && !isready(result)
+        sleep(0.5)
+        time_elapsed += 0.5
+    end
+    if !isready(result)
+        println("Timeout! at $wid")
+    else
+        res = take!(result)
+    end
+    return res
+end
+
+function runTask(origtask:: Task, timeoutms:: Int)
+    startTime = Dates.datetime2epochms(now())
+
+    function internal_task(taskFinished)
+        try
+            schedule(origtask)
+            yield()
+            wait(origtask)
+            if istaskdone(origtask)
+                taskFinished[] = true
+                Base.task_result(origtask)
+            else
+                throw(ErrorException("Task is not done even after wait() for it to finish - something is wrong"))
+            end
+        catch e
+            @warn "Error while processing task: $e"
+            taskFinished[] = true
+            missing
+        end
+    end
+
+    taskFinished = Threads.Atomic{Bool}(false)
+    thread = Threads.@spawn internal_task(taskFinished)
+    while !taskFinished[] && (Dates.datetime2epochms(now()) - startTime) < timeoutms
+        println("X", Dates.datetime2epochms(now()) - startTime)
+        sleep(0.1)
+        println("Y")
+    end
+    if taskFinished[]
+        return fetch(thread)
+    end
+    # Task timeouted
+    println("Timeout!")
+    origtask.exception = InterruptException()
+    println("Interrupted!")
+    return missing
+end # function
+
+# -----------------------------------------------------------------------------
+
 function get_vars(poly)
     total = vars(poly)
     params = [v for v in total if var_to_str(v)[1] in ('a', 'b')]
@@ -156,13 +217,33 @@ function get_relations_ideal(p, maxord, R)
         push!(eqs, str_to_var("U$i", RR) - parent_ring_change(coeffs[i + maxord + 2], RR))
     end
 
-    gb = groebner(eqs)
+    gbtask = @task begin; return groebner(eqs); end
+    gb = runTask(gbtask, 100)
+    if ismissing(gb)
+        gb = []
+    end
+    """
+    @everywhere function ff()
+        return groebner(eqs)
+    end
+    wid = addprocs(1)[1]
+    (gb, wid) = run_with_timeout(20, ff, wid)
+    rmprocs(wid)
+    if gb == :timeout
+        println("Timeout for p")
+        gb = []
+    end
+    """
+
     res = []
     for poly in gb
         if all([(var_to_str(v)[1] == 'U') || (var_to_str(v)[1] == 'Y') for v in vars(poly)])
             push!(res, parent_ring_change(poly, R))
         end
     end
+
+    #el = @elapsed res = groebner(eqs)
+    #@info "Elapsed $el"
     return res
 end
 
@@ -171,11 +252,13 @@ end
 io_collection = Dict()
 folder = "../models/"
 files = [
-    "models_n2_i1_o1_l0.json",
-    "models_n2_i1_o1_l1.json",
-    "models_n2_i1_o1_l2.json"
-    #"models_n3_i1_o1_l0.json",
-    #"models_n3_i1_o1_l3.json"
+    #"models_n2_i1_o1_l0.json",
+    #"models_n2_i1_o1_l1.json",
+    #"models_n2_i1_o1_l2.json"
+    "models_n3_i1_o1_l0.json",
+    "models_n3_i1_o1_l1.json",
+    "models_n3_i1_o1_l2.json",
+    "models_n3_i1_o1_l3.json"
 ]
 fnames = [folder * fname for fname in files]
 
@@ -200,6 +283,7 @@ for (m, eq) in io_collection
         total[rels] = [m]
     end
     println(ind)
+    flush(stdout)
     global ind += 1
 end
 
