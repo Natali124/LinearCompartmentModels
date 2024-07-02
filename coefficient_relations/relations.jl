@@ -16,13 +16,13 @@ F = QQ
 #   - inputs, outputs, leaks: arrays of leaks, input, and output nodes, respectively
 # Output: dictionary of the form edge (as a tuple of integers) => nonidentifiable/locally/globally
 # ყურადღება: for input and output the python (ie zero-based) indexing is used, leaks a edges to -1
-function run_model(graph, inputs, outputs, leaks)
+function run_model(graph, inputs, outputs, leaks, parametrize_inputs = true)
     graph_jl = [Array{Int, 1}([i + 1 for i in v]) for v in graph]
     leaks_jl = Array{Int, 1}([i + 1 for i in leaks])
     inputs_jl = Array{Int, 1}([i + 1 for i in inputs])
     outputs_jl = Array{Int, 1}([i + 1 for i in outputs])
 
-    model = linear_compartment_model_extra(graph_jl, inputs_jl, outputs_jl, leaks_jl)
+    model = linear_compartment_model_extra(graph_jl, inputs_jl, outputs_jl, leaks_jl, parametrize_inputs)
     ioeqs = find_ioequations(model)
     ioeq = first(values(ioeqs))
     leadvar = first(keys(ioeqs))
@@ -34,7 +34,7 @@ end
 
 # -----------------------------------------------------------------------------
 
-function linear_compartment_model_extra(graph, inputs, outputs, leaks)
+function linear_compartment_model_extra(graph, inputs, outputs, leaks, parametrize_inputs = true)
     "Adapted from StructuralIdentifiability.jl"
     n = length(graph)
     x_vars_names = ["x$i" for i in 1:n]
@@ -49,8 +49,10 @@ function linear_compartment_model_extra(graph, inputs, outputs, leaks)
     for s in leaks
         push!(edges_vars_names, "a_0_$(s)")
     end
-    for u in inputs
-        push!(edges_vars_names, "b_$u")
+    if parametrize_inputs
+        for u in inputs
+            push!(edges_vars_names, "b_$u")
+        end
     end
 
     R, vars = polynomial_ring(
@@ -71,7 +73,11 @@ function linear_compartment_model_extra(graph, inputs, outputs, leaks)
             x_equations[x_vars[i]] += -x_vars[i] * rate
         end
         if i in inputs
+            if parametrize_inputs
                 x_equations[x_vars[i]] += str_to_var("b_$i", R) * str_to_var("u$i", R)
+            else
+                x_equations[x_vars[i]] += str_to_var("u$i", R)
+            end
         end
     end
 
@@ -103,7 +109,7 @@ end
 # -----------------------------------------------------------------------------
 
 function print_model(model)
-        println("  Model of dimension $(length(model["graph"]))")
+    println("  Model of dimension $(length(model["graph"]))")
     println("    Outputs at nodes $(join(model["outputs"], ", ")), leaks at nodes $(join(model["leaks"], ", ")), inputs at nodes $(join(model["inputs"], ", "))")
     for i in 0:(length(model["graph"]) - 1)
         println("    Edges from $i : $(join(model["graph"][i + 1], ", "))")
@@ -112,74 +118,15 @@ end
 
 # -----------------------------------------------------------------------------
 
-function get_ioeqs!(io_collection, fname)
+function get_ioeqs!(io_collection, fname, parametrize_inputs = true)
     println("Processing $fname")
     models = read_models(fname)
     for (i, m) in enumerate(models)
         println("\tProcessing model $i out of $(length(models))")
-        result = run_model(m["graph"], m["inputs"], m["outputs"], m["leaks"])
+        result = run_model(m["graph"], m["inputs"], m["outputs"], m["leaks"], parametrize_inputs)
         io_collection[m] = result
    end
 end
-
-# -----------------------------------------------------------------------------
-
-# from https://stackoverflow.com/questions/53023386/set-a-time-limitation-on-algorithm-in-julia
-
-function run_with_timeout(timeout::Int,f::Function, wid::Int)
-    result = RemoteChannel(()->Channel{Tuple}(1));
-    @spawnat wid put!(result, (f(), myid()))
-    res = (:timeout, wid)
-    time_elapsed = 0.0
-    while time_elapsed < timeout && !isready(result)
-        sleep(0.5)
-        time_elapsed += 0.5
-    end
-    if !isready(result)
-        println("Timeout! at $wid")
-    else
-        res = take!(result)
-    end
-    return res
-end
-
-function runTask(origtask:: Task, timeoutms:: Int)
-    startTime = Dates.datetime2epochms(now())
-
-    function internal_task(taskFinished)
-        try
-            schedule(origtask)
-            yield()
-            wait(origtask)
-            if istaskdone(origtask)
-                taskFinished[] = true
-                Base.task_result(origtask)
-            else
-                throw(ErrorException("Task is not done even after wait() for it to finish - something is wrong"))
-            end
-        catch e
-            @warn "Error while processing task: $e"
-            taskFinished[] = true
-            missing
-        end
-    end
-
-    taskFinished = Threads.Atomic{Bool}(false)
-    thread = Threads.@spawn internal_task(taskFinished)
-    while !taskFinished[] && (Dates.datetime2epochms(now()) - startTime) < timeoutms
-        println("X", Dates.datetime2epochms(now()) - startTime)
-        sleep(0.1)
-        println("Y")
-    end
-    if taskFinished[]
-        return fetch(thread)
-    end
-    # Task timeouted
-    println("Timeout!")
-    origtask.exception = InterruptException()
-    println("Interrupted!")
-    return missing
-end # function
 
 # -----------------------------------------------------------------------------
 
@@ -219,27 +166,8 @@ function get_relations_ideal(p, maxord, R)
         push!(eqs, str_to_var("U$i", RR) - parent_ring_change(coeffs[i + maxord + 2], RR))
     end
 
-    """
-    gbtask = @task begin; return groebner(eqs); end
-    gb = runTask(gbtask, 1000)
-    if ismissing(gb)
-        gb = []
-    end
-    """
     ord = ProductOrdering(DegRevLex(new_params), DegRevLex(YUs))
     gb = groebner(eqs, ordering = ord)
-    """
-    @everywhere function ff()
-        return groebner(eqs)
-    end
-    wid = addprocs(1)[1]
-    (gb, wid) = run_with_timeout(20, ff, wid)
-    rmprocs(wid)
-    if gb == :timeout
-        println("Timeout for p")
-        gb = []
-    end
-    """
 
     res = []
     for poly in gb
@@ -269,7 +197,7 @@ files = [
 fnames = [folder * fname for fname in files]
 
 for f in fnames
-    get_ioeqs!(io_collection, f)
+    get_ioeqs!(io_collection, f, false)
 end
 
 ord = 2
